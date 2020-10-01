@@ -21,7 +21,7 @@ export default class Addmenu extends Component {
                  wholeResult: '',
                 };
    }
-   onClickListener = (viewId) => {
+   onClickListener = () => {
     if(this.state.description || this.state.description != " "){
      if(this.state.name){
       if(this.state.price){
@@ -108,7 +108,7 @@ AddMenuItem(){
           title="AddItem"
           color="green"
          // onPress={() =>{ this.onClickListener('sign_up'); this.props.navigation.navigate('Home')}}
-          onPress={() => this.onClickListener('sign_up')}
+          onPress={() => this.onClickListener()}
           
           />
           </View>

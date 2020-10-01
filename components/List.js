@@ -14,7 +14,7 @@ import {
 export default class List extends Component {
     constructor(props) {
         super(props);
-        
+        this.handleDeleteItem = this.handleDeleteItem.bind(this);
         this.state =  {
             //GetMenuItems : GetMenuItems.bind(this),
             data : [
@@ -24,6 +24,7 @@ export default class List extends Component {
             inputText: '',
             inputPrice:'',
             editedItem: 0, 
+            resp :'',
         };
     }
     // setselectvalue = (value) => {
@@ -123,12 +124,61 @@ export default class List extends Component {
         })
         this.setState({ data: newData })
     }
-    // handleDeleteItem = (deleteitem) => {
-    //     const newData = this.state.data.splice(item =>{
-    //         iitem.text, item.price
-    //     })
-    //     this.setState({ data: newData })
-    // }
+    onClickListener = (viewId) => {
+        if(this.state.description || this.state.description != " "){
+         if(this.state.name){
+          if(this.state.price){
+              this.handleDeleteItem();
+           }else{
+          Alert.alert("Please Enter Description");
+         }
+         }else{
+        Alert.alert("Please Enter Name of the Item");
+        }
+      }else{
+    Alert.alert("Please enter Price of Item");
+    }
+    }
+    
+    handleDeleteItem( ){
+        var that = this;
+  // var url = that.state.baseUrl + 'register.php';
+  //  console.log("url:"+url);
+  fetch('https://limitless-crag-24152.herokuapp.com/Eatery/Dell%206%20Cafeteria/Breakfast',{
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+          'Content-Type': 'application/json'
+        },
+        // headers: {
+        //   'Accept':       'application/json',
+        //   'Content-Type': 'application/json',
+        //   'X-CSRFToken':  cookie.load('csrftoken')
+        // }
+        body:({ "name": this.state.inputText})
+        })
+        // .then(response => response.json())  // promise
+        // .then(json => dispatch(receiveAppos(json)))
+        .then(function (response) {
+          return response.json();
+        }).then(function (result) { 
+          // console.log(result);
+          if(!result.error){
+           that.setState({ 
+                          //  status: result.error,
+                           resp: result,
+                        });
+           Alert.alert(+that.state.resp);
+           console.log(that.state.resp);
+       }else{
+        Alert.alert(result.error_msg);
+        console.log(result);
+  }
+}).catch(function (error) {
+  console.log("-------- error ------- "+error);
+  alert("result:"+error)
+});
+    }
 
 
     renderItem = ({item}) => (
@@ -193,7 +243,7 @@ export default class List extends Component {
                             style={[styles.touchableHighlight, {backgroundColor: 'green'}]} underlayColor={'#f1f1f1'}>
                             <Text style={styles.text}>Save</Text>
                         </TouchableHighlight>  
-                        <TouchableHighlight onPress={() => {this.handleEditItem(this.state.editeditem); this.setModalVisible(false)}} 
+                        <TouchableHighlight onPress={() => {this.onClickListener(); this.setModalVisible(false)}} 
                             style={[styles.touchableHighlight, {backgroundColor: 'green'}]} underlayColor={'#f1f1f1'}>
                             <Text style={styles.text}>Delete</Text>
                         </TouchableHighlight> 
