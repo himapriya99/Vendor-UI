@@ -43,12 +43,21 @@ AddMenuItem(){
   //  console.log("url:"+url);
   fetch('https://limitless-crag-24152.herokuapp.com/Eatery/Dell%206%20Cafeteria/Breakfast',{
         method: 'POST',
-        body: JSON.stringify({"description": this.state.description, "name": this.state.name,"price": this.state.price})
+        headers: {
+          'Accept': 'application/json, text/plain, */*',  // It can be used to overcome cors errors
+          'Content-Type': 'application/json'
+        },
+        // headers: {
+        //   'Accept':       'application/json',
+        //   'Content-Type': 'application/json',
+        //   'X-CSRFToken':  cookie.load('csrftoken')
+        // }
+        body:({"description": this.state.description, "name": this.state.name,"price": this.state.price})
         })
         // .then(response => response.json())  // promise
         // .then(json => dispatch(receiveAppos(json)))
         .then(function (response) {
-          return response.text();
+          return response.json();
         }).then(function (result) { 
           // console.log(result);
           if(!result.error){
